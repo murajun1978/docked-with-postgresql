@@ -22,7 +22,9 @@ jobs:
       - id: changed-files-specific
         uses: tj-actions/changed-files@v44
         with:
-          files: Dockerfile
+          files: |
+            Dockerfile
+            .github/workflows/*.yml
 
   build_and_push:
     if: (needs.change_dockerfile.outputs.any_changed == 'true')
@@ -31,6 +33,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - uses: docker/setup-qemu-action@v3
       - uses: docker/setup-buildx-action@v3
       - id: meta
         uses: docker/metadata-action@v5
@@ -48,6 +51,7 @@ jobs:
       - uses: docker/build-push-action@v5
         with:
           context: .
+          platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

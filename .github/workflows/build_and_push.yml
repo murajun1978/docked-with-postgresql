@@ -9,7 +9,24 @@ on:
       - main
 
 jobs:
+  change_dockerfile:
+    runs-on: ubuntu-latest
+
+    outputs:
+      any_changed: ${{ steps.changed-files-specific.outputs.any_changed }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: changed-files-specific
+        uses: tj-actions/changed-files@v44
+        with:
+          files: Dockerfile
+
   build_and_push:
+    if: (needs.change_dockerfile.outputs.any_changed == 'true')
+    needs: change_dockerfile
     runs-on: ubuntu-latest
 
     steps:

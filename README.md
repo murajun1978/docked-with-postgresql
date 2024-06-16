@@ -7,8 +7,17 @@ Install [Docker](https://www.docker.com/products/docker-desktop/) (and [WSL](htt
 
 ```bash
 docker volume create ruby-bundle-cache
-alias docked='docker run --rm -it -v ${PWD}:/rails -u $(id -u):$(id -g) -v ruby-bundle-cache:/bundle -p 3000:3000 ghcr.io/rails/cli'
+alias docked='docker run --rm -it -v ${PWD}:/rails -u $(id -u):$(id -g) -v ruby-bundle-cache:/bundle -p 3000:3000 ghcr.io/murajun1978/docked-with-postgresql:main'
 ```
+
+If your PC is Apple Silicon M series, please specify the platform option.
+`--platform linux/amd64`
+
+e.g.
+```bash
+alias docked='docker run --rm -it --platform linux/amd64 -v ${PWD}:/rails -u $(id -u):$(id -g) -v ruby-bundle-cache:/bundle -p 3000:3000 ghcr.io/murajun1978/docked-with-postgresql:main'
+```
+
 
 Then create your Rails app:
 
